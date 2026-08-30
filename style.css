@@ -1,0 +1,324 @@
+:root {
+  --paper: #efe9dc;
+  --paper-raised: #f7f3e8;
+  --paper-dark: #e2d9c2;
+  --ink: #26221c;
+  --ink-soft: #5b5344;
+  --line: #c9bea0;
+  --accent: #a63d2f;
+  --accent-soft: rgba(166, 61, 47, 0.1);
+  --success: #3d6b4f;
+  --success-soft: rgba(61, 107, 79, 0.12);
+  --radius: 3px;
+  --serif: 'Roboto Slab', serif;
+  --sans: 'IBM Plex Sans', sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+}
+
+* { box-sizing: border-box; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(38,34,28,0.035) 28px);
+  color: var(--ink);
+  font-family: var(--sans);
+  min-height: 100vh;
+}
+
+/* ---------- Cabecera ---------- */
+.cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 1.75rem;
+  border-bottom: 2px solid var(--ink);
+  background: var(--paper-raised);
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.cabecera-marca { position: relative; padding-left: 0.25rem; }
+
+.cabecera-marca h1 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.6rem;
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+.cabecera-sub {
+  margin: 0.15rem 0 0;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  font-family: var(--mono);
+}
+
+.cabecera-estado {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius);
+  background: var(--paper);
+}
+
+.cabecera-estado .punto {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ink-soft);
+  display: inline-block;
+}
+.cabecera-estado.ok .punto { background: var(--success); }
+.cabecera-estado.error .punto { background: var(--accent); }
+
+/* ---------- Layout ---------- */
+.contenedor {
+  display: grid;
+  grid-template-columns: minmax(320px, 420px) 1fr;
+  gap: 1.75rem;
+  padding: 1.75rem;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .contenedor { grid-template-columns: 1fr; }
+}
+
+.etiqueta-gaveta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 1rem;
+  border-bottom: 1px dashed var(--line);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.numero-gaveta {
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+/* ---------- Panel formulario (la ficha) ---------- */
+.panel-formulario {
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: 0 1px 0 var(--line), 0 8px 18px -14px rgba(38,34,28,0.4);
+  position: sticky;
+  top: 1.75rem;
+}
+
+.ficha { display: flex; flex-direction: column; gap: 0.9rem; }
+
+.campo { display: flex; flex-direction: column; gap: 0.3rem; }
+
+.campo label {
+  font-size: 0.78rem;
+  font-family: var(--mono);
+  color: var(--ink-soft);
+  text-transform: lowercase;
+}
+
+.campo .opcional { color: var(--ink-soft); opacity: 0.7; }
+
+.fila { display: flex; gap: 0.75rem; }
+.campo-corto { flex: 0 0 90px; }
+.campo-larga { flex: 1; }
+
+input, select {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+input:focus, select:focus, button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+input::placeholder { color: #a89e88; }
+
+.acciones-ficha {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.4rem;
+}
+
+.boton {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+
+.boton-primario {
+  background: var(--accent);
+  color: var(--paper-raised);
+}
+.boton-primario:hover { transform: translateY(-1px); background: #8f342a; }
+
+.boton-fantasma {
+  background: transparent;
+  color: var(--ink-soft);
+  border-color: var(--line);
+}
+.boton-fantasma:hover { border-color: var(--ink-soft); }
+
+.mensaje-formulario {
+  min-height: 1.1rem;
+  font-size: 0.82rem;
+  font-family: var(--mono);
+  margin: 0;
+}
+.mensaje-formulario.ok { color: var(--success); }
+.mensaje-formulario.error { color: var(--accent); }
+
+/* ---------- Buscador ---------- */
+.buscador { margin-bottom: 1rem; }
+.buscador input {
+  width: 100%;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+}
+
+/* ---------- Listado como tarjetero ---------- */
+.listado-clientes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.vacio {
+  font-family: var(--mono);
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  padding: 2rem 0;
+  text-align: center;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+}
+
+.tarjeta-cliente {
+  position: relative;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--ink);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem 1rem 1.4rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.6rem 1rem;
+  animation: aparecer 0.25s ease both;
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tarjeta-cliente::before {
+  content: '';
+  position: absolute;
+  left: -3px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+
+.tarjeta-info h3 {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  margin: 0 0 0.3rem;
+}
+
+.tarjeta-linea {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  margin: 0.1rem 0;
+}
+
+.tarjeta-linea strong { color: var(--ink); font-weight: 500; }
+
+.sello-ciudad {
+  font-family: var(--serif);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1.5px solid var(--accent);
+  border-radius: 50%;
+  width: 54px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transform: rotate(-8deg);
+  opacity: 0.75;
+  padding: 0.2rem;
+  line-height: 1.05;
+  flex-shrink: 0;
+}
+
+.tarjeta-acciones {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 0.5rem;
+  border-top: 1px dashed var(--line);
+  padding-top: 0.6rem;
+  margin-top: 0.2rem;
+}
+
+.tarjeta-acciones button {
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+  color: var(--ink-soft);
+}
+
+.tarjeta-acciones button:hover { border-color: var(--ink); color: var(--ink); }
+.tarjeta-acciones button.eliminar:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ---------- Pie ---------- */
+.pie {
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  padding: 1.5rem;
+}

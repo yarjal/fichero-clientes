@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+<title>Fichero de Clientes — Datos para Factura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="cabecera">
+    <div class="cabecera-marca">
+      <h1>Fichero de Clientes</h1>
+      <p class="cabecera-sub">Registro de datos para facturación</p>
+    </div>
+    <div class="cabecera-estado" id="estadoConexion">
+      <span class="punto"></span>
+      <span class="texto">Conectando…</span>
+    </div>
+  </header>
+
+  <main class="contenedor">
+
+    <section class="panel-formulario" aria-labelledby="tituloFormulario">
+      <div class="etiqueta-gaveta">
+        <span id="tituloFormulario">Nueva ficha</span>
+        <span class="numero-gaveta" id="modoFormulario">— Registrar cliente</span>
+      </div>
+
+      <form id="formCliente" class="ficha" novalidate>
+        <input type="hidden" id="clienteId" />
+
+        <div class="campo">
+          <label for="nombreCompleto">Nombre y apellido / Razón social</label>
+          <input type="text" id="nombreCompleto" name="nombreCompleto" required placeholder="Ej. María Fernanda Zambrano" />
+        </div>
+
+        <div class="fila">
+          <div class="campo campo-corto">
+            <label for="tipoIdentificacion">Tipo</label>
+            <select id="tipoIdentificacion" name="tipoIdentificacion">
+              <option value="RUC">RUC</option>
+              <option value="Cédula">Cédula</option>
+              <option value="Pasaporte">Pasaporte</option>
+            </select>
+          </div>
+          <div class="campo campo-larga">
+            <label for="identificacion">Número</label>
+            <input type="text" id="identificacion" name="identificacion" required placeholder="Ej. 0801234567001" inputmode="numeric" />
+          </div>
+        </div>
+
+        <div class="campo">
+          <label for="direccion">Dirección</label>
+          <input type="text" id="direccion" name="direccion" required placeholder="Ej. Av. Bolívar y Sucre, Esmeraldas" />
+        </div>
+
+        <div class="fila">
+          <div class="campo">
+            <label for="telefono">Teléfono</label>
+            <input type="tel" id="telefono" name="telefono" required placeholder="Ej. 0991234567" />
+          </div>
+          <div class="campo">
+            <label for="ciudad">Ciudad</label>
+            <input type="text" id="ciudad" name="ciudad" placeholder="Ej. Esmeraldas" />
+          </div>
+        </div>
+
+        <div class="campo">
+          <label for="correo">Correo electrónico <span class="opcional">(opcional)</span></label>
+          <input type="email" id="correo" name="correo" placeholder="Ej. cliente@correo.com" />
+        </div>
+
+        <div class="acciones-ficha">
+          <button type="submit" class="boton boton-primario" id="botonGuardar">Guardar ficha</button>
+          <button type="button" class="boton boton-fantasma" id="botonCancelar" hidden>Cancelar edición</button>
+        </div>
+
+        <p class="mensaje-formulario" id="mensajeFormulario" role="status"></p>
+      </form>
+    </section>
+
+    <section class="panel-listado" aria-labelledby="tituloListado">
+      <div class="etiqueta-gaveta">
+        <span id="tituloListado">Fichero</span>
+        <span class="numero-gaveta" id="contadorClientes">0 clientes</span>
+      </div>
+
+      <div class="buscador">
+        <input type="search" id="buscador" placeholder="Buscar por nombre, RUC, teléfono o ciudad…" />
+      </div>
+
+      <div id="listadoClientes" class="listado-clientes" aria-live="polite">
+        <p class="vacio" id="mensajeVacio">Cargando fichero…</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="pie">
+    <p>Los datos se guardan directamente en tu proyecto de Firebase.</p>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
