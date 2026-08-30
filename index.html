@@ -10,6 +10,25 @@
 </head>
 <body>
 
+  <section id="pantallaAcceso" class="pantalla-acceso">
+    <form id="formAcceso" class="tarjeta-acceso">
+      <h1>Fichero de Clientes</h1>
+      <p class="cabecera-sub">Ingresa tu clave de acceso</p>
+      <div class="campo">
+        <label for="correoAcceso">Correo</label>
+        <input type="email" id="correoAcceso" required autocomplete="username" />
+      </div>
+      <div class="campo">
+        <label for="claveAcceso">Contraseña</label>
+        <input type="password" id="claveAcceso" required autocomplete="current-password" />
+      </div>
+      <button type="submit" class="boton boton-primario">Entrar</button>
+      <p class="mensaje-formulario" id="mensajeAcceso" role="status"></p>
+    </form>
+  </section>
+
+  <div id="appPrincipal" hidden>
+
   <header class="cabecera">
     <div class="cabecera-marca">
       <h1>Fichero de Clientes</h1>
@@ -19,6 +38,7 @@
       <span class="punto"></span>
       <span class="texto">Conectando…</span>
     </div>
+    <button type="button" id="botonSalir" class="boton boton-fantasma">Salir</button>
   </header>
 
   <main class="contenedor">
@@ -102,6 +122,8 @@
   <footer class="pie">
     <p>Los datos se guardan directamente en tu proyecto de Firebase.</p>
   </footer>
+
+  </div>
 
   <script type="module" src="app.js"></script>
 </body>

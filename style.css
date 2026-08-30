@@ -31,6 +31,40 @@ body {
   min-height: 100vh;
 }
 
+/* ---------- Pantalla de acceso ---------- */
+.pantalla-acceso {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.tarjeta-acceso {
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 2rem;
+  width: 100%;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  box-shadow: 0 1px 0 var(--line), 0 8px 18px -14px rgba(38,34,28,0.4);
+}
+
+.tarjeta-acceso h1 {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  margin: 0;
+  text-align: center;
+}
+
+.tarjeta-acceso .cabecera-sub {
+  text-align: center;
+  margin: -0.4rem 0 0.4rem;
+}
+
 /* ---------- Cabecera ---------- */
 .cabecera {
   display: flex;

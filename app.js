@@ -1,4 +1,4 @@
-import { db } from "./firebase-config.js";
+import { db, auth } from "./firebase-config.js";
 import {
   collection,
   addDoc,
@@ -10,6 +10,49 @@ import {
   orderBy,
   serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+import {
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+
+const pantallaAcceso = document.getElementById('pantallaAcceso');
+const appPrincipal = document.getElementById('appPrincipal');
+const formAcceso = document.getElementById('formAcceso');
+const mensajeAcceso = document.getElementById('mensajeAcceso');
+const botonSalir = document.getElementById('botonSalir');
+
+let dejarDeEscuchar = null;
+
+formAcceso.addEventListener('submit', async (evento) => {
+  evento.preventDefault();
+  mensajeAcceso.textContent = '';
+  const correo = document.getElementById('correoAcceso').value.trim();
+  const clave = document.getElementById('claveAcceso').value;
+  try {
+    await signInWithEmailAndPassword(auth, correo, clave);
+  } catch (error) {
+    mensajeAcceso.textContent = 'Correo o contraseña incorrectos.';
+    mensajeAcceso.className = 'mensaje-formulario error';
+  }
+});
+
+botonSalir.addEventListener('click', () => signOut(auth));
+
+onAuthStateChanged(auth, (usuario) => {
+  if (usuario) {
+    pantallaAcceso.hidden = true;
+    appPrincipal.hidden = false;
+    if (!dejarDeEscuchar) dejarDeEscuchar = iniciarEscuchaClientes();
+  } else {
+    pantallaAcceso.hidden = false;
+    appPrincipal.hidden = true;
+    if (dejarDeEscuchar) {
+      dejarDeEscuchar();
+      dejarDeEscuchar = null;
+    }
+  }
+});
 
 const form = document.getElementById('formCliente');
 const listado = document.getElementById('listadoClientes');
@@ -27,21 +70,23 @@ let todosLosClientes = [];
 const clientesRef = collection(db, 'clientes');
 const consultaOrdenada = query(clientesRef, orderBy('createdAt', 'desc'));
 
-onSnapshot(
-  consultaOrdenada,
-  (snapshot) => {
-    estadoConexion.className = 'cabecera-estado ok';
-    estadoConexion.querySelector('.texto').textContent = 'Base de datos conectada';
-    todosLosClientes = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
-    renderizarClientes(filtrar(todosLosClientes, buscador.value.trim()));
-  },
-  (error) => {
-    estadoConexion.className = 'cabecera-estado error';
-    estadoConexion.querySelector('.texto').textContent = 'Sin conexión a la base de datos';
-    listado.innerHTML = `<p class="vacio">No se pudo conectar con Firebase. Revisa tu configuración en firebase-config.js y las reglas de Firestore.</p>`;
-    console.error(error);
-  }
-);
+function iniciarEscuchaClientes() {
+  return onSnapshot(
+    consultaOrdenada,
+    (snapshot) => {
+      estadoConexion.className = 'cabecera-estado ok';
+      estadoConexion.querySelector('.texto').textContent = 'Base de datos conectada';
+      todosLosClientes = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+      renderizarClientes(filtrar(todosLosClientes, buscador.value.trim()));
+    },
+    (error) => {
+      estadoConexion.className = 'cabecera-estado error';
+      estadoConexion.querySelector('.texto').textContent = 'Sin conexión a la base de datos';
+      listado.innerHTML = `<p class="vacio">No se pudo conectar con Firebase. Revisa tu configuración en firebase-config.js y las reglas de Firestore.</p>`;
+      console.error(error);
+    }
+  );
+}
 
 function filtrar(clientes, texto) {
   if (!texto) return clientes;
