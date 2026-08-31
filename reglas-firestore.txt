@@ -4,5 +4,8 @@ service cloud.firestore {
     match /clientes/{clienteId} {
       allow read, write: if request.auth != null;
     }
+    match /atendidosHoy/{entradaId} {
+      allow read, write: if request.auth != null;
+    }
   }
 }

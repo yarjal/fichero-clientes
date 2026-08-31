@@ -348,6 +348,71 @@ input::placeholder { color: #a89e88; }
 .tarjeta-acciones button:hover { border-color: var(--ink); color: var(--ink); }
 .tarjeta-acciones button.eliminar:hover { border-color: var(--accent); color: var(--accent); }
 
+/* ---------- Panel de hoy ---------- */
+.panel-hoy {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.75rem 1.75rem;
+}
+
+.nota-hoy {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  margin: -0.4rem 0 1rem;
+}
+
+.listado-hoy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fila-hoy {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.6rem 0.9rem;
+}
+
+.fila-hoy.facturado {
+  border-color: var(--success);
+  background: var(--success-soft);
+}
+
+.check-facturado {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+
+.check-facturado input { width: 17px; height: 17px; accent-color: var(--success); }
+
+.fila-hoy.facturado .check-facturado { text-decoration: line-through; color: var(--ink-soft); }
+
+.quitar-hoy {
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  padding: 0.2rem 0.55rem;
+  cursor: pointer;
+}
+.quitar-hoy:hover { border-color: var(--accent); color: var(--accent); }
+
+.tarjeta-acciones button.agregar-hoy.activo {
+  border-color: var(--success);
+  color: var(--success);
+}
+
 /* ---------- Pie ---------- */
 .pie {
   text-align: center;

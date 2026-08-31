@@ -119,6 +119,17 @@
 
   </main>
 
+  <section class="panel-hoy" aria-labelledby="tituloHoy">
+    <div class="etiqueta-gaveta">
+      <span id="tituloHoy">Facturados de hoy</span>
+      <span class="numero-gaveta" id="fechaHoy"></span>
+    </div>
+    <p class="nota-hoy">Esta lista se reinicia cada día — solo muestra lo agregado hoy.</p>
+    <div id="listaHoy" class="listado-hoy" aria-live="polite">
+      <p class="vacio">Aún no has agregado clientes a la lista de hoy.</p>
+    </div>
+  </section>
+
   <footer class="pie">
     <p>Los datos se guardan directamente en tu proyecto de Firebase.</p>
   </footer>

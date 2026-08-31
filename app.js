@@ -8,6 +8,8 @@ import {
   onSnapshot,
   query,
   orderBy,
+  where,
+  getDocs,
   serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 import {
@@ -23,6 +25,7 @@ const mensajeAcceso = document.getElementById('mensajeAcceso');
 const botonSalir = document.getElementById('botonSalir');
 
 let dejarDeEscuchar = null;
+let dejarDeEscucharHoy = null;
 
 formAcceso.addEventListener('submit', async (evento) => {
   evento.preventDefault();
@@ -44,12 +47,20 @@ onAuthStateChanged(auth, (usuario) => {
     pantallaAcceso.hidden = true;
     appPrincipal.hidden = false;
     if (!dejarDeEscuchar) dejarDeEscuchar = iniciarEscuchaClientes();
+    if (!dejarDeEscucharHoy) {
+      limpiarDiasAnteriores();
+      dejarDeEscucharHoy = iniciarEscuchaHoy();
+    }
   } else {
     pantallaAcceso.hidden = false;
     appPrincipal.hidden = true;
     if (dejarDeEscuchar) {
       dejarDeEscuchar();
       dejarDeEscuchar = null;
+    }
+    if (dejarDeEscucharHoy) {
+      dejarDeEscucharHoy();
+      dejarDeEscucharHoy = null;
     }
   }
 });
@@ -66,6 +77,75 @@ const estadoConexion = document.getElementById('estadoConexion');
 
 let clienteEnEdicion = null;
 let todosLosClientes = [];
+let entradasHoy = [];
+
+const listaHoy = document.getElementById('listaHoy');
+const fechaHoyEtiqueta = document.getElementById('fechaHoy');
+
+function fechaDeHoy() {
+  const ahora = new Date();
+  const anio = ahora.getFullYear();
+  const mes = String(ahora.getMonth() + 1).padStart(2, '0');
+  const dia = String(ahora.getDate()).padStart(2, '0');
+  return `${anio}-${mes}-${dia}`;
+}
+
+const atendidosHoyRef = collection(db, 'atendidosHoy');
+
+async function limpiarDiasAnteriores() {
+  try {
+    const hoy = fechaDeHoy();
+    const todos = await getDocs(atendidosHoyRef);
+    const borrados = todos.docs
+      .filter((d) => d.data().fecha !== hoy)
+      .map((d) => deleteDoc(doc(db, 'atendidosHoy', d.id)));
+    await Promise.all(borrados);
+  } catch (error) {
+    console.error('No se pudo limpiar la lista de días anteriores:', error);
+  }
+}
+
+function iniciarEscuchaHoy() {
+  const hoy = fechaDeHoy();
+  fechaHoyEtiqueta.textContent = new Date().toLocaleDateString('es-EC', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  });
+  const consultaHoy = query(atendidosHoyRef, where('fecha', '==', hoy));
+  return onSnapshot(
+    consultaHoy,
+    (snapshot) => {
+      entradasHoy = snapshot.docs
+        .map((d) => ({ id: d.id, ...d.data() }))
+        .sort((a, b) => (a.agregadoEn?.seconds || 0) - (b.agregadoEn?.seconds || 0));
+      renderizarListaHoy();
+      renderizarClientes(filtrar(todosLosClientes, buscador.value.trim()));
+    },
+    (error) => console.error('Error escuchando la lista de hoy:', error)
+  );
+}
+
+function renderizarListaHoy() {
+  if (entradasHoy.length === 0) {
+    listaHoy.innerHTML = '<p class="vacio">Aún no has agregado clientes a la lista de hoy.</p>';
+    return;
+  }
+
+  listaHoy.innerHTML = entradasHoy
+    .map(
+      (e) => `
+    <div class="fila-hoy ${e.facturado ? 'facturado' : ''}" data-id="${e.id}">
+      <label class="check-facturado">
+        <input type="checkbox" class="marcar-facturado" data-id="${e.id}" ${e.facturado ? 'checked' : ''} />
+        <span>${escaparHtml(e.nombreCompleto)} <span class="tarjeta-linea">— ${escaparHtml(e.identificacion || '')}</span></span>
+      </label>
+      <button type="button" class="quitar-hoy" data-id="${e.id}" title="Quitar de la lista de hoy">✕</button>
+    </div>
+  `
+    )
+    .join('');
+}
 
 const clientesRef = collection(db, 'clientes');
 const consultaOrdenada = query(clientesRef, orderBy('createdAt', 'desc'));
@@ -123,7 +203,9 @@ function renderizarClientes(clientes) {
 
   listado.innerHTML = clientes
     .map(
-      (c) => `
+      (c) => {
+        const yaEnHoy = entradasHoy.some((e) => e.clienteId === c.id);
+        return `
     <article class="tarjeta-cliente" data-id="${c.id}">
       <div class="tarjeta-info">
         <h3>${escaparHtml(c.nombreCompleto)}</h3>
@@ -135,9 +217,11 @@ function renderizarClientes(clientes) {
       <div class="tarjeta-acciones">
         <button type="button" class="editar" data-id="${c.id}">Editar</button>
         <button type="button" class="eliminar" data-id="${c.id}">Eliminar</button>
+        <button type="button" class="agregar-hoy ${yaEnHoy ? 'activo' : ''}" data-id="${c.id}">${yaEnHoy ? '✓ En hoy' : '+ Hoy'}</button>
       </div>
     </article>
-  `
+  `;
+      }
     )
     .join('');
 }
@@ -222,6 +306,39 @@ listado.addEventListener('click', async (evento) => {
     await deleteDoc(doc(db, 'clientes', id));
     if (clienteEnEdicion === id) limpiarFormulario();
   }
+
+  if (evento.target.classList.contains('agregar-hoy')) {
+    const existente = entradasHoy.find((e) => e.clienteId === id);
+    if (existente) {
+      await deleteDoc(doc(db, 'atendidosHoy', existente.id));
+    } else {
+      const cliente = todosLosClientes.find((c) => c.id === id);
+      if (!cliente) return;
+      await addDoc(atendidosHoyRef, {
+        clienteId: cliente.id,
+        nombreCompleto: cliente.nombreCompleto,
+        identificacion: cliente.identificacion,
+        fecha: fechaDeHoy(),
+        facturado: false,
+        agregadoEn: serverTimestamp(),
+      });
+    }
+  }
+});
+
+listaHoy.addEventListener('click', async (evento) => {
+  const id = evento.target.dataset.id;
+  if (!id) return;
+
+  if (evento.target.classList.contains('quitar-hoy')) {
+    await deleteDoc(doc(db, 'atendidosHoy', id));
+  }
+});
+
+listaHoy.addEventListener('change', async (evento) => {
+  if (!evento.target.classList.contains('marcar-facturado')) return;
+  const id = evento.target.dataset.id;
+  await updateDoc(doc(db, 'atendidosHoy', id), { facturado: evento.target.checked });
 });
 
 buscador.addEventListener('input', () => {
