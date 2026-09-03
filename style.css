@@ -5,14 +5,19 @@
   --ink: #26221c;
   --ink-soft: #5b5344;
   --line: #c9bea0;
-  --accent: #a63d2f;
-  --accent-soft: rgba(166, 61, 47, 0.1);
-  --success: #3d6b4f;
-  --success-soft: rgba(61, 107, 79, 0.12);
+  --accent: #d1382a;
+  --accent-soft: rgba(209, 56, 42, 0.1);
+  --verde: #2f7d4a;
+  --verde-oscuro: #1d5432;
+  --verde-soft: rgba(47, 125, 74, 0.12);
+  --dorado: #e0a930;
+  --success: #2f7d4a;
+  --success-soft: rgba(47, 125, 74, 0.12);
   --radius: 3px;
   --serif: 'Roboto Slab', serif;
   --sans: 'IBM Plex Sans', sans-serif;
   --mono: 'IBM Plex Mono', monospace;
+  --display: 'Baloo 2', var(--serif);
 }
 
 * { box-sizing: border-box; }
@@ -54,8 +59,11 @@ body {
 }
 
 .tarjeta-acceso h1 {
-  font-family: var(--serif);
-  font-size: 1.4rem;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 1.6rem;
+  color: var(--verde);
+  -webkit-text-stroke: 1.2px var(--ink);
   margin: 0;
   text-align: center;
 }
@@ -71,7 +79,8 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 1.75rem;
-  border-bottom: 2px solid var(--ink);
+  border-bottom: 4px solid var(--verde);
+  box-shadow: 0 4px 0 -1px var(--accent);
   background: var(--paper-raised);
   flex-wrap: wrap;
   gap: 0.75rem;
@@ -89,7 +98,15 @@ body {
 .mascota-cabecera { width: 50px; height: 55px; }
 .mascota-login { width: 76px; height: 84px; margin: 0 auto; display: block; }
 
-.cabecera-marca-logo h1 { margin: 0; }
+.cabecera-marca-logo h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 1.7rem;
+  color: var(--verde);
+  -webkit-text-stroke: 1.5px var(--ink);
+  letter-spacing: 0.01em;
+}
 .cabecera-marca-logo .cabecera-sub { margin: 0.1rem 0 0; }
 
 .cabecera-marca h1 {
@@ -225,10 +242,10 @@ input::placeholder { color: #a89e88; }
 }
 
 .boton-primario {
-  background: var(--accent);
+  background: var(--verde);
   color: var(--paper-raised);
 }
-.boton-primario:hover { transform: translateY(-1px); background: #8f342a; }
+.boton-primario:hover { transform: translateY(-1px); background: var(--verde-oscuro); }
 
 .boton-fantasma {
   background: transparent;
