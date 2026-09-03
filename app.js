@@ -81,6 +81,7 @@ let entradasHoy = [];
 
 const listaHoy = document.getElementById('listaHoy');
 const fechaHoyEtiqueta = document.getElementById('fechaHoy');
+const totalHoyEtiqueta = document.getElementById('totalHoy');
 
 function fechaDeHoy() {
   const ahora = new Date();
@@ -127,6 +128,9 @@ function iniciarEscuchaHoy() {
 }
 
 function renderizarListaHoy() {
+  const total = entradasHoy.reduce((acc, e) => acc + (Number(e.montoConsumo) || 0), 0);
+  totalHoyEtiqueta.textContent = `Total del día: $${total.toFixed(2)}`;
+
   if (entradasHoy.length === 0) {
     listaHoy.innerHTML = '<p class="vacio">Aún no has agregado clientes a la lista de hoy.</p>';
     return;
@@ -140,6 +144,10 @@ function renderizarListaHoy() {
         <input type="checkbox" class="marcar-facturado" data-id="${e.id}" ${e.facturado ? 'checked' : ''} />
         <span>${escaparHtml(e.nombreCompleto)} <span class="tarjeta-linea">— ${escaparHtml(e.identificacion || '')}</span></span>
       </label>
+      <div class="consumo-campo">
+        <span>$</span>
+        <input type="number" class="monto-consumo" data-id="${e.id}" min="0" step="0.01" placeholder="0.00" value="${e.montoConsumo ? e.montoConsumo : ''}" />
+      </div>
       <button type="button" class="quitar-hoy" data-id="${e.id}" title="Quitar de la lista de hoy">✕</button>
     </div>
   `
@@ -320,6 +328,7 @@ listado.addEventListener('click', async (evento) => {
         identificacion: cliente.identificacion,
         fecha: fechaDeHoy(),
         facturado: false,
+        montoConsumo: 0,
         agregadoEn: serverTimestamp(),
       });
     }
@@ -336,9 +345,16 @@ listaHoy.addEventListener('click', async (evento) => {
 });
 
 listaHoy.addEventListener('change', async (evento) => {
-  if (!evento.target.classList.contains('marcar-facturado')) return;
-  const id = evento.target.dataset.id;
-  await updateDoc(doc(db, 'atendidosHoy', id), { facturado: evento.target.checked });
+  if (evento.target.classList.contains('marcar-facturado')) {
+    const id = evento.target.dataset.id;
+    await updateDoc(doc(db, 'atendidosHoy', id), { facturado: evento.target.checked });
+  }
+
+  if (evento.target.classList.contains('monto-consumo')) {
+    const id = evento.target.dataset.id;
+    const valor = parseFloat(evento.target.value);
+    await updateDoc(doc(db, 'atendidosHoy', id), { montoConsumo: isNaN(valor) ? 0 : valor });
+  }
 });
 
 buscador.addEventListener('input', () => {
