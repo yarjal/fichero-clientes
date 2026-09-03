@@ -3,16 +3,36 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-<title>Fichero de Clientes — Datos para Factura</title>
+<title>Super Encebollados Luigi — Fichero de Clientes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="mascotaChef" viewBox="0 0 120 132">
+        <path d="M30 46c-11 0-19-9-19-19 0-10 8-19 18-19 2-9 10-16 21-16s19 7 21 16c10 0 18 9 18 19 0 10-8 19-19 19z" fill="var(--paper-raised)" stroke="var(--ink)" stroke-width="3"/>
+        <rect x="32" y="42" width="56" height="12" rx="4" fill="var(--paper-raised)" stroke="var(--ink)" stroke-width="3"/>
+        <circle cx="60" cy="76" r="28" fill="#e7b489" stroke="var(--ink)" stroke-width="3"/>
+        <ellipse cx="46" cy="80" rx="5" ry="3.5" fill="#d99a70" opacity="0.6"/>
+        <ellipse cx="74" cy="80" rx="5" ry="3.5" fill="#d99a70" opacity="0.6"/>
+        <circle cx="50" cy="70" r="2.6" fill="var(--ink)"/>
+        <circle cx="70" cy="70" r="2.6" fill="var(--ink)"/>
+        <path d="M44 63c3-2.5 8-2.5 11 0" stroke="var(--ink)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M65 63c3-2.5 8-2.5 11 0" stroke="var(--ink)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M60 71v7" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M38 86c4 7 13 9 22 9s18-2 22-9c-4 5-10 6-14 4.5 2 4.5 0.5 9-2.5 11-1.5-4.5-3.5-8-5.5-8s-4 3.5-5.5 8c-3-2-4.5-6.5-2.5-11-4 1.5-10 0.5-14-4.5z" fill="var(--ink)"/>
+        <path d="M38 104c6 6 15 9 22 9s16-3 22-9l-5 18c-5 3.5-12 5-17 5s-12-1.5-17-5z" fill="var(--accent)" stroke="var(--ink)" stroke-width="2.5"/>
+      </symbol>
+    </defs>
+  </svg>
+
   <section id="pantallaAcceso" class="pantalla-acceso">
     <form id="formAcceso" class="tarjeta-acceso">
-      <h1>Fichero de Clientes</h1>
+      <svg class="mascota mascota-login" viewBox="0 0 120 132"><use href="#mascotaChef"/></svg>
+      <h1>Super Encebollados Luigi</h1>
       <p class="cabecera-sub">Ingresa tu clave de acceso</p>
       <div class="campo">
         <label for="correoAcceso">Correo</label>
@@ -30,9 +50,12 @@
   <div id="appPrincipal" hidden>
 
   <header class="cabecera">
-    <div class="cabecera-marca">
-      <h1>Fichero de Clientes</h1>
-      <p class="cabecera-sub">Registro de datos para facturación</p>
+    <div class="cabecera-marca cabecera-marca-logo">
+      <svg class="mascota mascota-cabecera" viewBox="0 0 120 132"><use href="#mascotaChef"/></svg>
+      <div>
+        <h1>Super Encebollados Luigi</h1>
+        <p class="cabecera-sub">Fichero de clientes</p>
+      </div>
     </div>
     <div class="cabecera-estado" id="estadoConexion">
       <span class="punto"></span>

@@ -79,6 +79,19 @@ body {
 
 .cabecera-marca { position: relative; padding-left: 0.25rem; }
 
+.cabecera-marca-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mascota { flex-shrink: 0; }
+.mascota-cabecera { width: 50px; height: 55px; }
+.mascota-login { width: 76px; height: 84px; margin: 0 auto; display: block; }
+
+.cabecera-marca-logo h1 { margin: 0; }
+.cabecera-marca-logo .cabecera-sub { margin: 0.1rem 0 0; }
+
 .cabecera-marca h1 {
   font-family: var(--serif);
   font-weight: 700;
